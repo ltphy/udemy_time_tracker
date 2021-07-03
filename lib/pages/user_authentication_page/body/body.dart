@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/pages/user_authentication_page/components/custom_sign_in/custom_sign_in.dart';
+import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/sign_in_button.dart';
+import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/social_sign_in_button.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.grey,
+        color: Colors.grey[100],
         width: MediaQuery.of(context).size.width,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -31,24 +32,23 @@ class _BodyState extends State<Body> {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline3),
               ),
-              CustomSignIn(
-                icon: Icons.android,
+              SocialSignInButton(
+                imageAsset: 'images/google-logo.png',
                 title: 'Sign in with Google',
                 bgColor: Colors.white,
                 onSignIn: () {},
                 fgColor: Colors.black,
               ),
               SizedBox(height: 10),
-              CustomSignIn(
-                icon: Icons.filter,
+              SocialSignInButton(
+                imageAsset: 'images/facebook-logo.png',
                 title: 'Sign in with Facebook',
                 bgColor: Colors.indigo,
                 onSignIn: () {},
                 fgColor: Colors.white,
               ),
               SizedBox(height: 10),
-              CustomSignIn(
-                icon: Icons.android,
+              SignInButton(
                 title: 'Sign in with email',
                 bgColor: Colors.green,
                 onSignIn: () {},
@@ -61,13 +61,12 @@ class _BodyState extends State<Body> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              CustomSignIn(
-                icon: Icons.android,
-                title: 'Anonymous',
+              SignInButton(
+                title: 'Go anonymous',
                 bgColor: Colors.yellow,
                 onSignIn: () {},
                 fgColor: Colors.black,
-              )
+              ),
             ],
           ),
         ));
