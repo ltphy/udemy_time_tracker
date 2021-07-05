@@ -1,14 +1,33 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/sign_in_button.dart';
 import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/social_sign_in_button.dart';
+import 'package:udemy_timer_tracker/services/sign_in_services.dart';
 
 class Body extends StatefulWidget {
+  const Body({
+    Key? key,
+    required this.signIn,
+    required this.auth,
+  }) : super(key: key);
+  final Function(User? user) signIn;
+  final Auth auth;
+
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
+  Future<void> signIn() async {
+    try {
+      final user = await widget.auth.signInAnonymous();
+      widget.signIn(user);
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -64,7 +83,7 @@ class _BodyState extends State<Body> {
               SignInButton(
                 title: 'Go anonymous',
                 bgColor: Colors.yellow,
-                onSignIn: () {},
+                onSignIn: signIn,
                 fgColor: Colors.black,
               ),
             ],
