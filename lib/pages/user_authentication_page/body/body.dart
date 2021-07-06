@@ -5,34 +5,20 @@ import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/sign_
 import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/social_sign_in_button.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
 
-class Body extends StatefulWidget {
+class Body extends StatelessWidget {
   const Body({
     Key? key,
-    required this.signIn,
     required this.auth,
   }) : super(key: key);
-  final Function(User? user) signIn;
   final Auth auth;
 
-  @override
-  _BodyState createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
   Future<void> signIn() async {
     try {
-      final user = await widget.auth.signInAnonymous();
-      widget.signIn(user);
+      final user = await auth.signInAnonymous();
     } catch (error) {
       print(error.toString());
     }
   }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
