@@ -1,6 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/sign_in_button.dart';
 import 'package:udemy_timer_tracker/pages/user_authentication_page/widgets/social_sign_in_button.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
@@ -19,6 +21,31 @@ class Body extends StatelessWidget {
       print(error.toString());
     }
   }
+
+  Future<void> signInWithFacebook() async {
+    try {
+      final user = await auth.signInWithFacebook();
+      print('json ${user?.email} ${user?.displayName} ${user?.email}');
+      final accessToken = await FacebookAuth.instance.accessToken;
+      if (accessToken != null) {
+        final userData = await FacebookAuth.instance.getUserData(
+          fields: "email,birthday,friends,gender,link",
+        );
+        print(jsonEncode(userData));
+      }
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final user = await auth.signInWithGoogle();
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +68,7 @@ class Body extends StatelessWidget {
                 imageAsset: 'images/google-logo.png',
                 title: 'Sign in with Google',
                 bgColor: Colors.white,
-                onSignIn: () {},
+                onSignIn: signInWithGoogle,
                 fgColor: Colors.black,
               ),
               SizedBox(height: 10),
@@ -49,7 +76,7 @@ class Body extends StatelessWidget {
                 imageAsset: 'images/facebook-logo.png',
                 title: 'Sign in with Facebook',
                 bgColor: Colors.indigo,
-                onSignIn: () {},
+                onSignIn: signInWithFacebook,
                 fgColor: Colors.white,
               ),
               SizedBox(height: 10),
