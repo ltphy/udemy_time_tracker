@@ -1,6 +1,7 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class BaseAuth {
   User? get currentUser;
@@ -12,6 +13,12 @@ abstract class BaseAuth {
   Future<User?> signInWithGoogle();
 
   Future<User?> signInWithFacebook();
+
+  Future<User?> signInWithEmail(
+      {required String email, required String password});
+
+  Future<User?> registerNewAccount(
+      {required String email, required String password});
 
   Future<void> signOut();
 }
@@ -58,12 +65,14 @@ class Auth extends BaseAuth {
                   accessToken: googleAuth.accessToken));
           return userCredential.user;
         } else {
+          // Missing google ID token
           throw FirebaseAuthException(
             code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
             message: 'Missing Google ID token',
           );
         }
       } else {
+        // cancel sign in button
         throw FirebaseAuthException(
           code: 'ERROR_ABORTED_BY_USER',
           message: 'Sign in aborted by user',
@@ -86,17 +95,60 @@ class Auth extends BaseAuth {
         }
         break;
       case LoginStatus.cancelled:
+        // cancel sign in session
         throw FirebaseAuthException(
           code: 'ERROR_LOGIN_IN_CANCELLED',
           message: 'Sign in aborted by user',
         );
       case LoginStatus.failed:
+        // login failed because invalid?
         throw FirebaseAuthException(
           code: 'ERROR_FACEBOOK_LOGIN_FAILED',
           message: result.message.toString(),
         );
       default:
         throw UnimplementedError();
+    }
+  }
+
+  @override
+  Future<User?> signInWithEmail(
+      {required String email, required String password}) async {
+    if (email.isEmpty || password.isEmpty) return null;
+    try {
+      UserCredential userCredential = await this
+          ._firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
+      return userCredential.user;
+    } catch (error) {
+      print('error');
+      // cancel sign in session
+      throw FirebaseAuthException(
+        code: 'ERROR_EMAIL_LOGIN_FAILED',
+        message: error.toString(),
+      );
+    }
+  }
+
+  @override
+  Future<User?> registerNewAccount(
+      {required String email, required String password}) async {
+    if (email.isEmpty || password.isEmpty) return null;
+    try {
+      UserCredential userCredential = await this
+          ._firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      return userCredential.user;
+    } on FirebaseAuthException catch (error) {
+      // cancel sign in session
+      print('error');
+      switch (error.code) {
+
+        case 'weak-password':
+          throw ('The password provided is too weak.');
+        case 'email-already-in-use':
+          throw ('The account already exists for that email.');
+      }
     }
   }
 }
