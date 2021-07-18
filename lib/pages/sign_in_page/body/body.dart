@@ -24,10 +24,39 @@ class _BodyState extends State<Body>
   final TextEditingController _emailEditingController = TextEditingController();
   final TextEditingController _passwordEditingController =
       TextEditingController();
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
 
   FormType _formType = FormType.signIn;
-  bool isSubmitted = false;
   final _formKey = GlobalKey<FormState>();
+
+  void _emailEditingComplete() {
+    FocusScope.of(context).requestFocus(passwordFocusNode);
+  }
+
+  Future<void> _submit() async {
+// or validate here first
+    if (!this._formKey.currentState!.validate()) {
+      return;
+    }
+    if (this._formType == FormType.signIn) {
+      final user = await widget.auth.signInWithEmail(
+        email: _emailEditingController.text,
+        password: _passwordEditingController.text,
+      );
+      if (user != null) {
+        Navigator.of(context).pop();
+      }
+    } else {
+      final user = await widget.auth.registerNewAccount(
+        email: _emailEditingController.text,
+        password: _passwordEditingController.text,
+      );
+      if (user != null) {
+        Navigator.of(context).pop();
+      }
+    }
+  }
 
   // does not validate when form open and only validate after the form is submitted failed.
   @override
@@ -46,6 +75,7 @@ class _BodyState extends State<Body>
                   Padding(
                     padding: EdgeInsets.only(left: 8.0, right: 8.0),
                     child: TextFormField(
+                      focusNode: emailFocusNode,
                       controller: _emailEditingController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
@@ -53,6 +83,8 @@ class _BodyState extends State<Body>
                         border: UnderlineInputBorder(),
                       ),
                       validator: validateEmail,
+                      textInputAction: TextInputAction.next,
+                      onEditingComplete: _emailEditingComplete,
                     ),
                   ),
                   Padding(
@@ -65,37 +97,15 @@ class _BodyState extends State<Body>
                         border: UnderlineInputBorder(),
                       ),
                       validator: validatePassword,
+                      onEditingComplete: _submit,
+                      textInputAction: TextInputAction.done,
+                      focusNode: passwordFocusNode,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () async {
-                        // or validate here first
-                        setState(() {
-                          this.isSubmitted = true;
-                        });
-                        if (!this._formKey.currentState!.validate()) {
-                          return;
-                        }
-                        if (this._formType == FormType.signIn) {
-                          final user = await widget.auth.signInWithEmail(
-                            email: _emailEditingController.text,
-                            password: _passwordEditingController.text,
-                          );
-                          if (user != null) {
-                            Navigator.of(context).pop();
-                          }
-                        } else {
-                          final user = await widget.auth.registerNewAccount(
-                            email: _emailEditingController.text,
-                            password: _passwordEditingController.text,
-                          );
-                          if (user != null) {
-                            Navigator.of(context).pop();
-                          }
-                        }
-                      },
+                      onPressed: _submit,
                       child: this._formType == FormType.register
                           ? Text('Register')
                           : Text('Sign in'),
@@ -105,14 +115,15 @@ class _BodyState extends State<Body>
                     onPressed: () {
                       this._emailEditingController.clear();
                       this._passwordEditingController.clear();
+                      this._formKey.currentState!.reset();
                       this._formType = this._formType == FormType.register
                           ? FormType.signIn
                           : FormType.register;
                       this.setState(() {});
                     },
                     child: this._formType == FormType.register
-                        ? Text('Need an account, Register?')
-                        : Text('Got an account, Sign in'),
+                        ? Text('Got an account, Sign in')
+                        : Text('Need an account, Register?'),
                   ),
                 ],
               ),
