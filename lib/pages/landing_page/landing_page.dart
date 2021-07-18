@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/common_widgets/custom_progress_indicator.dart';
 import 'package:udemy_timer_tracker/pages/home/home.dart';
 import 'package:udemy_timer_tracker/pages/user_authentication_page/user_auththentication_page.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
