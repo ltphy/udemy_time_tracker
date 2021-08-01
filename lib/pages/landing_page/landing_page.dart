@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/pages/home/home.dart';
 import 'package:udemy_timer_tracker/pages/user_authentication_page/user_auththentication_page.dart';
-import 'package:udemy_timer_tracker/services/sign_in_services.dart';
+import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 
 class LandingPage extends StatelessWidget {
-  final Auth auth;
-
-  const LandingPage({Key? key, required this.auth}) : super(key: key);
+  const LandingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +14,9 @@ class LandingPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           print(snapshot.hasData.toString());
           if (!snapshot.hasData) {
-            return UserAuthenticationPage(
-              auth: auth,
-            );
+            return UserAuthenticationPage();
           } else {
-            return HomePage(
-              auth: auth,
-            );
+            return HomePage();
           }
         }
         return Scaffold(
@@ -30,7 +25,7 @@ class LandingPage extends StatelessWidget {
           ),
         );
       },
-      stream: auth.streamUser,
+      stream: context.read<AuthenticateProvider>().auth.streamUser,
     );
   }
 }

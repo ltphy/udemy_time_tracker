@@ -1,16 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:udemy_timer_tracker/services/sign_in_services.dart';
+import 'package:udemy_timer_tracker/provider/auth_provider.dart';
+import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/validators.dart';
+import 'package:provider/provider.dart';
 
 class Body extends StatefulWidget {
-  final Auth auth;
-
   const Body({
     Key? key,
-    required this.auth,
   }) : super(key: key);
 
   @override
@@ -36,25 +36,31 @@ class _BodyState extends State<Body>
 
   Future<void> _submit() async {
 // or validate here first
-    if (!this._formKey.currentState!.validate()) {
-      return;
-    }
-    if (this._formType == FormType.signIn) {
-      final user = await widget.auth.signInWithEmail(
-        email: _emailEditingController.text,
-        password: _passwordEditingController.text,
-      );
-      if (user != null) {
-        Navigator.of(context).pop();
+    try {
+      if (!this._formKey.currentState!.validate()) {
+        return;
       }
-    } else {
-      final user = await widget.auth.registerNewAccount(
-        email: _emailEditingController.text,
-        password: _passwordEditingController.text,
-      );
-      if (user != null) {
-        Navigator.of(context).pop();
+      if (this._formType == FormType.signIn) {
+        final user =
+            await context.read<AuthenticateProvider>().auth.signInWithEmail(
+                  email: _emailEditingController.text,
+                  password: _passwordEditingController.text,
+                );
+        if (user != null) {
+          Navigator.of(context).pop();
+        }
+      } else {
+        final user =
+            await context.read<AuthenticateProvider>().auth.registerNewAccount(
+                  email: _emailEditingController.text,
+                  password: _passwordEditingController.text,
+                );
+        if (user != null) {
+          Navigator.of(context).pop();
+        }
       }
+    } on FirebaseAuthException catch (error) {
+      await DialogService.instance.showExceptionDialog(context, error);
     }
   }
 

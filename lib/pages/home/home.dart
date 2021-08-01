@@ -1,17 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/services/sign_in_services.dart';
+import 'package:udemy_timer_tracker/provider/auth_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:udemy_timer_tracker/services/dialog_services.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({required this.auth});
+  HomePage();
 
   static const String route = '/date-tracker';
-  final Auth auth;
 
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     try {
-      await auth.signOut();
+      await context.read<AuthenticateProvider>().auth.signOut();
+      // await context.read<AuthenticateProvider
     } catch (error) {
-      print(error.toString());
+      // print(error.toString());
+      await DialogService.instance.showMyDialog(
+        context,
+        message: error.toString(),
+        defaultActionText: 'OK',
+        title: 'Error',
+      );
+    }
+  }
+
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final bool? requestSignOut = await DialogService.instance.showMyDialog(
+      context,
+      message: 'Are you sure that you want to logout?',
+      defaultActionText: 'Logout',
+      title: 'Error',
+      cancelActionText: 'Cancel',
+    );
+    if (requestSignOut == true) {
+      await this.signOut(context);
     }
   }
 
@@ -23,7 +44,7 @@ class HomePage extends StatelessWidget {
         title: Text('Home Page'),
         actions: [
           TextButton(
-            onPressed: signOut,
+            onPressed: () => _confirmSignOut(context),
             child: Text(
               'Sign out',
               style: TextStyle(color: Colors.white),

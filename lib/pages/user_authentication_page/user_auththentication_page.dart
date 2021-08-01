@@ -10,9 +10,7 @@ class UserAuthenticationPage extends StatelessWidget {
 
   const UserAuthenticationPage({
     Key? key,
-    required this.auth,
   }) : super(key: key);
-  final Auth auth;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +21,7 @@ class UserAuthenticationPage extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        body: Body(
-          auth: auth,
-        ),
+        body: Body(),
         appBar: AppBar(
           title: Center(child: Text('Time Tracker')),
         ),

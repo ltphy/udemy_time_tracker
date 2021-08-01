@@ -1,5 +1,5 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -51,35 +51,31 @@ class Auth extends BaseAuth {
   Future<User?> signInWithGoogle() async {
     // create google sign in object
     final googleSignIn = GoogleSignIn();
-    try {
-      // create google sign in process;
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser != null) {
-        // get google auth
-        final googleAuth = await googleUser.authentication;
-        // accesstoken to send to firebase auth with id token
-        if (googleAuth.idToken != null) {
-          final userCredential = await _firebaseAuth.signInWithCredential(
-              GoogleAuthProvider.credential(
-                  idToken: googleAuth.idToken,
-                  accessToken: googleAuth.accessToken));
-          return userCredential.user;
-        } else {
-          // Missing google ID token
-          throw FirebaseAuthException(
-            code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
-            message: 'Missing Google ID token',
-          );
-        }
+    // create google sign in process;
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser != null) {
+      // get google auth
+      final googleAuth = await googleUser.authentication;
+      // accesstoken to send to firebase auth with id token
+      if (googleAuth.idToken != null) {
+        final userCredential = await _firebaseAuth.signInWithCredential(
+            GoogleAuthProvider.credential(
+                idToken: googleAuth.idToken,
+                accessToken: googleAuth.accessToken));
+        return userCredential.user;
       } else {
-        // cancel sign in button
+        // Missing google ID token
         throw FirebaseAuthException(
-          code: 'ERROR_ABORTED_BY_USER',
-          message: 'Sign in aborted by user',
+          code: describeEnum(ERROR_CODE.ERROR_MISSING_GOOGLE_ID_TOKEN),
+          message: 'Missing Google ID token',
         );
       }
-    } catch (error) {
-      throw (error);
+    } else {
+      // cancel sign in button
+      throw FirebaseAuthException(
+        code: describeEnum(ERROR_CODE.ERROR_ABORTED_BY_USER),
+        message: 'Sign in aborted by user',
+      );
     }
   }
 
@@ -97,13 +93,13 @@ class Auth extends BaseAuth {
       case LoginStatus.cancelled:
         // cancel sign in session
         throw FirebaseAuthException(
-          code: 'ERROR_LOGIN_IN_CANCELLED',
-          message: 'Sign in aborted by user',
+          code: describeEnum(ERROR_CODE.ERROR_ABORTED_BY_USER),
+          message: result.message.toString(),
         );
       case LoginStatus.failed:
         // login failed because invalid?
         throw FirebaseAuthException(
-          code: 'ERROR_FACEBOOK_LOGIN_FAILED',
+          code: describeEnum(ERROR_CODE.ERROR_FACEBOOK_LOGIN_FAILED),
           message: result.message.toString(),
         );
       default:
@@ -115,19 +111,11 @@ class Auth extends BaseAuth {
   Future<User?> signInWithEmail(
       {required String email, required String password}) async {
     if (email.isEmpty || password.isEmpty) return null;
-    try {
-      UserCredential userCredential = await this
-          ._firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
-      return userCredential.user;
-    } catch (error) {
-      print('error');
-      // cancel sign in session
-      throw FirebaseAuthException(
-        code: 'ERROR_EMAIL_LOGIN_FAILED',
-        message: error.toString(),
-      );
-    }
+
+    UserCredential userCredential = await this
+        ._firebaseAuth
+        .signInWithEmailAndPassword(email: email, password: password);
+    return userCredential.user;
   }
 
   @override
@@ -141,9 +129,7 @@ class Auth extends BaseAuth {
       return userCredential.user;
     } on FirebaseAuthException catch (error) {
       // cancel sign in session
-      print('error');
       switch (error.code) {
-
         case 'weak-password':
           throw ('The password provided is too weak.');
         case 'email-already-in-use':
@@ -151,4 +137,10 @@ class Auth extends BaseAuth {
       }
     }
   }
+}
+
+enum ERROR_CODE {
+  ERROR_MISSING_GOOGLE_ID_TOKEN,
+  ERROR_ABORTED_BY_USER,
+  ERROR_FACEBOOK_LOGIN_FAILED
 }
