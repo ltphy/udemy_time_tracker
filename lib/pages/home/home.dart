@@ -11,14 +11,13 @@ class HomePage extends StatelessWidget {
   Future<void> signOut(BuildContext context) async {
     try {
       await context.read<AuthenticateProvider>().auth.signOut();
-      // await context.read<AuthenticateProvider
     } catch (error) {
       // print(error.toString());
       await DialogService.instance.showMyDialog(
         context,
         message: error.toString(),
         defaultActionText: 'OK',
-        title: 'Error',
+        title: 'Log out',
       );
     }
   }

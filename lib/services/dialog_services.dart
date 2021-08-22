@@ -12,7 +12,7 @@ class DialogService {
 
   Future<bool?> showMyDialog(
     BuildContext context, {
-    required String title,
+    String? title,
     required String message,
     String? cancelActionText,
     required String defaultActionText,
@@ -20,7 +20,7 @@ class DialogService {
     return showDialog<bool>(
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Center(child: Text(title)),
+          title: title != null ? Center(child: Text(title)) : null,
           content: Text(message),
           actions: <Widget>[
             if (cancelActionText != null)
