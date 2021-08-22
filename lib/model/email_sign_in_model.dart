@@ -13,11 +13,10 @@ class EmailSignInModel with FormValidators, EmailAndPasswordValidators {
 
   EmailSignInModel copyWith({FormType? formType, bool? isLoading}) {
     return EmailSignInModel(
-      formType: this.formType ?? FormType.signIn,
-      isLoading: this.isLoading ?? isLoading,
+      formType: formType ?? this.formType,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
-
 
   String get switchFormText => this.formType == FormType.register
       ? 'Got an account, Sign in'

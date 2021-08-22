@@ -12,16 +12,16 @@ class EmailSignInBloc {
 
   EmailSignInBloc({required this.auth});
 
-  get stream => _modelController.stream;
+  Stream<EmailSignInModel> get stream => _modelController.stream;
 
   void dispose() {
     _modelController.close();
   }
 
   void updateWith({FormType? formType, bool? isLoading}) {
-    EmailSignInModel model =
+     this._model =
         _model.copyWith(formType: formType, isLoading: isLoading);
-    _modelController.add(model);
+    _modelController.add(this._model);
   }
 
   Future<void> submit(String email, String password) async {
@@ -29,9 +29,9 @@ class EmailSignInBloc {
     this.updateWith(isLoading: true);
     try {
       if (_model.formType == FormType.signIn) {
-        auth.signInWithEmail(email: email, password: password);
+        await auth.signInWithEmail(email: email, password: password);
       } else {
-        auth.registerNewAccount(email: email, password: password);
+        await auth.registerNewAccount(email: email, password: password);
       }
     } catch (error) {
       this.updateWith(isLoading: false);

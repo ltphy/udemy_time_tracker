@@ -10,7 +10,7 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Body(),
+      body: Body.create(context),
       appBar: AppBar(
         title: Center(child: Text('Time Tracker')),
       ),

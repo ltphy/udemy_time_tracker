@@ -7,9 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/BLoC/email_sign_in_bloc.dart';
 import 'package:udemy_timer_tracker/model/email_sign_in_model.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
-import 'package:udemy_timer_tracker/provider/loading_provider.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
-import 'package:udemy_timer_tracker/services/validators.dart';
 
 class Body extends StatefulWidget {
   final EmailSignInBloc bloc;
@@ -25,6 +23,7 @@ class Body extends StatefulWidget {
           return Body(bloc: bloc);
         },
       ),
+      dispose: (_, bloc) => bloc.dispose(),
     );
   }
 
@@ -52,10 +51,10 @@ class _BodyState extends State<Body> {
       }
       await widget.bloc.submit(this._emailEditingController.text,
           this._passwordEditingController.text);
+      Navigator.of(context).pop();
     } on FirebaseAuthException catch (error) {
+      print('error');
       await DialogService.instance.showExceptionDialog(context, error);
-    } finally {
-      context.read<LoadingProvider>().updateLoading();
     }
   }
 
@@ -76,6 +75,7 @@ class _BodyState extends State<Body> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         final EmailSignInModel model = snapshot.data;
         bool? isLoading = model.isLoading;
+        print('rerender');
         return (isLoading != null && isLoading)
             ? Center(
                 child: CircularProgressIndicator(),
@@ -133,6 +133,7 @@ class _BodyState extends State<Body> {
                               this._emailEditingController.clear();
                               this._passwordEditingController.clear();
                               this._formKey.currentState!.reset();
+                              print('toggle button');
                               widget.bloc.toggleButtonSwitch();
                             },
                             child: Text(model.switchFormText),
