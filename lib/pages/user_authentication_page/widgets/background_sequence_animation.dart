@@ -20,16 +20,16 @@ class _BackgroundSequenceAnimationState
       vsync: this,
       duration: Duration(seconds: 1),
     );
-    animation = this
-        ._controller
-        .drive(ColorTween(begin: Colors.red, end: Colors.green));
+    animation = ColorTween(
+              begin: Colors.red,
+              end: Colors.green,
+            ).animate(_controller);
     this._controller..repeat();
   }
 
   @override
   void dispose() {
     _controller.dispose();
-
     super.dispose();
   }
 

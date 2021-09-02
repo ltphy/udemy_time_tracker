@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +39,12 @@ class _BodyState extends State<Body> {
       TextEditingController();
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _emailEditingComplete() {
     FocusScope.of(context).requestFocus(passwordFocusNode);
@@ -75,7 +81,6 @@ class _BodyState extends State<Body> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         final EmailSignInModel model = snapshot.data;
         bool? isLoading = model.isLoading;
-        print('rerender');
         return (isLoading != null && isLoading)
             ? Center(
                 child: CircularProgressIndicator(),
