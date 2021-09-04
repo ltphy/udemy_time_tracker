@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_timer_tracker/pages/home/screens/job_updater_widget.dart';
+import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
+import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 import 'body/body.dart';
 
@@ -40,6 +42,13 @@ class JobsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Body(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          final database = Provider.of<Database>(context, listen: false);
+          JobUpdaterWidget.show(context, database: database);
+        },
+      ),
       appBar: AppBar(
         title: Text('Home Page'),
         actions: [

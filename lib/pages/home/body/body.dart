@@ -27,7 +27,11 @@ class Body extends StatelessWidget {
               ),
             );
           }
-          return SizedBox();
+          return Center(
+            child: Text(
+              'Some error occured!',
+            ),
+          );
         } else {
           return Center(
             child: CircularProgressIndicator(),

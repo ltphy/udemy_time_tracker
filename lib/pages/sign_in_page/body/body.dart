@@ -55,6 +55,7 @@ class _BodyState extends State<Body> {
       if (!this._formKey.currentState!.validate()) {
         return;
       }
+
       await widget.bloc.submit(this._emailEditingController.text,
           this._passwordEditingController.text);
       Navigator.of(context).pop();

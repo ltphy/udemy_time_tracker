@@ -20,6 +20,56 @@ class NonEmptyFieldValidator implements Validator {
   }
 }
 
+class TextLimitationValidator extends NonEmptyFieldValidator {
+  @override
+  bool validate(String? value) {
+    bool result = super.validate(value);
+    if (result) {
+      if (value != null) {
+        return value.length > 3 && value.length < 30;
+      }
+    }
+    return result;
+  }
+}
+
+class DoubleValidator extends NonEmptyFieldValidator {
+  @override
+  bool validate(String? value) {
+    bool result = super.validate(value);
+    if (result) {
+      if (value != null) {
+        double? number = double.tryParse(value);
+        return number != null;
+      }
+    }
+    return true;
+  }
+}
+
+class JobValidators {
+  final TextLimitationValidator _textLimitationValidator =
+      TextLimitationValidator();
+  final DoubleValidator _doubleValidator = DoubleValidator();
+  final String textLimitationText =
+      'Name length must be 3 to 10 characters long';
+  final String ratePerHourText = 'Rate Per Hour must be an integer';
+
+  String? validateName(String? value) {
+    if (!_textLimitationValidator.validate(value)) {
+      return textLimitationText;
+    }
+    return null;
+  }
+
+  String? validateRatePerHour(String? value) {
+    if (!_doubleValidator.validate(value)) {
+      return this.ratePerHourText;
+    }
+    return null;
+  }
+}
+
 class EmailAndPasswordValidators {
   final EmailValidator emailValidator = EmailValidator();
   final NonEmptyFieldValidator nonEmptyFieldValidator =
