@@ -4,10 +4,15 @@ part 'job.g.dart';
 
 @JsonSerializable()
 class Job {
-  final String? name;
-  final double? ratePerHour;
+  String? name;
+  double? ratePerHour;
+  String id;
 
-  Job({this.name, this.ratePerHour});
+  Job({
+    this.name,
+    this.ratePerHour,
+    required this.id,
+  });
 
   factory Job.fromJson(Map<String, dynamic> json) => _$JobFromJson(json);
 

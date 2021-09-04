@@ -58,12 +58,16 @@ class _MyAppState extends State<MyApp> {
                 String? routeName = settings.name;
                 if (routeName == null) return null;
                 if (routeName == JobUpdaterWidget.route) {
-                  final args = settings.arguments as Database;
+                  final args = settings.arguments as JobUpdateArgument;
                   return MaterialPageRoute(
-                      builder: (context) {
-                        return JobUpdaterWidget(database: args);
-                      },
-                      fullscreenDialog: true);
+                    builder: (context) {
+                      return JobUpdaterWidget(
+                        database: args.database,
+                        job: args.job,
+                      );
+                    },
+                    fullscreenDialog: true,
+                  );
                 }
               },
             ),

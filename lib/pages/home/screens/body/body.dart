@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
-import 'package:udemy_timer_tracker/services/firestore_database.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_timer_tracker/common_widgets/custom_progress_indicator.dart';
+import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
+import 'package:udemy_timer_tracker/provider/selected_job_provider.dart';
 import 'package:udemy_timer_tracker/services/validators.dart';
 
 class Body extends StatefulWidget {
@@ -12,17 +13,29 @@ class Body extends StatefulWidget {
   State<Body> createState() => _BodyState();
 }
 
+String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
+
 class _BodyState extends State<Body> with JobValidators {
-  TextEditingController _nameController = new TextEditingController();
-  TextEditingController _ratePerHourController = new TextEditingController();
   FocusNode _nameFocusNode = new FocusNode();
   FocusNode _ratePerHourFocusNode = new FocusNode();
+  late String? _defaultName;
+  late double? _defaultRatePerHour;
+
+  GlobalKey<FormState> get _formKey =>
+      Provider.of<SelectedJobProvider>(context, listen: false).formKey;
+
+  @override
+  void didChangeDependencies() {
+    Job job = context.read<SelectedJobProvider>().job;
+    _defaultName = job.name;
+    _defaultRatePerHour = job.ratePerHour;
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _ratePerHourController.dispose();
     _nameFocusNode.dispose();
+    _ratePerHourFocusNode.dispose();
     super.dispose();
   }
 
@@ -30,20 +43,10 @@ class _BodyState extends State<Body> with JobValidators {
     FocusScope.of(context).requestFocus(_ratePerHourFocusNode);
   }
 
-  final _formKey = GlobalKey<FormState>();
-
   Future<void> updateJob() async {
     try {
-      print('validated');
-
-      if (_formKey.currentState!.validate()) {
-        print('validated');
-        String name = _nameController.text;
-        double ratePerHour = double.parse(_ratePerHourController.text);
-        Job job = Job(name: name, ratePerHour: ratePerHour);
-        await context.read<Database>().createJob(job);
-        Navigator.of(context).pop();
-      }
+      await context.read<SelectedJobProvider>().updateJobInDatabase();
+      Navigator.of(context).pop();
     } catch (error) {
       print(error);
     }
@@ -57,47 +60,63 @@ class _BodyState extends State<Body> with JobValidators {
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: TextFormField(
-                      focusNode: _nameFocusNode,
-                      controller: _nameController,
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        labelText: 'Name',
-                        border: UnderlineInputBorder(),
-                      ),
-                      validator: validateName,
-                      textInputAction: TextInputAction.next,
-                      onEditingComplete: _nameEditingComplete,
+            child: context.watch<SelectedJobProvider>().loading
+                ? Center(child: CustomProgressIndicator())
+                : Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: TextFormField(
+                            onSaved: (value) => context
+                                .read<SelectedJobProvider>()
+                                .updateJob(name: value),
+                            initialValue: _defaultName,
+                            focusNode: _nameFocusNode,
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              labelText: 'Name',
+                              border: UnderlineInputBorder(),
+                            ),
+                            validator: validateName,
+                            textInputAction: TextInputAction.next,
+                            onEditingComplete: _nameEditingComplete,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: TextFormField(
+                            initialValue: _defaultRatePerHour != null
+                                ? '$_defaultRatePerHour'
+                                : null,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onSaved: (value) => context
+                                .read<SelectedJobProvider>()
+                                .updateJob(
+                                    ratePerHour: value != null
+                                        ? double.tryParse(value)
+                                        : null),
+                            keyboardType: TextInputType.numberWithOptions(
+                                signed: false, decimal: false),
+                            focusNode: _ratePerHourFocusNode,
+                            decoration: InputDecoration(
+                              labelText: 'Rate Per Hour',
+                              border: UnderlineInputBorder(),
+                            ),
+                            // validator: model.validatePassword,
+                            onEditingComplete: updateJob,
+                            validator: validateRatePerHour,
+                            textInputAction: TextInputAction.done,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: TextFormField(
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
-                      controller: _ratePerHourController,
-                      focusNode: _ratePerHourFocusNode,
-                      decoration: InputDecoration(
-                        labelText: 'Rate Per Hour',
-                        border: UnderlineInputBorder(),
-                      ),
-                      // validator: model.validatePassword,
-                      onEditingComplete: updateJob,
-                      validator: validateRatePerHour,
-                      textInputAction: TextInputAction.done,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ),
       ),

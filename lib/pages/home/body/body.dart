@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_timer_tracker/pages/home/body/widgets/job_list_widget.dart';
 import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
@@ -13,19 +14,7 @@ class Body extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           List<Job>? jobs = snapshot.data;
           if (jobs != null) {
-            return Container(
-              child: ListView.builder(
-                itemBuilder: (_, index) {
-                  return ListTile(
-                    title: Text(
-                      jobs[index].name ?? '',
-                    ),
-                    trailing: Icon(Icons.arrow_right),
-                  );
-                },
-                itemCount: jobs.length,
-              ),
-            );
+            return JobListWidget(jobs: jobs);
           }
           return Center(
             child: Text(

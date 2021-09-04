@@ -6,25 +6,40 @@ import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 import 'body/body.dart';
 
+class JobUpdateArgument {
+  final Database database;
+  final Job? job;
+
+  JobUpdateArgument({required this.database, this.job});
+}
+
 class JobUpdaterWidget extends StatelessWidget {
   final Database database;
+  final Job? job;
+  late SelectedJobProvider selectedJobProvider;
 
-  const JobUpdaterWidget({Key? key, required this.database}) : super(key: key);
+  JobUpdaterWidget({Key? key, required this.database, this.job})
+      : super(key: key) {
+    selectedJobProvider = SelectedJobProvider(
+      job: job ?? Job(id: documentIdFromCurrentDate()),
+      database: database,
+    );
+  }
 
   static Future<void> show(BuildContext context,
-      {required Database database}) async {
+      {required Database database, Job? job}) async {
+    JobUpdateArgument jobUpdateArgument =
+        JobUpdateArgument(database: database, job: job);
     await Navigator.of(context)
-        .pushNamed(JobUpdaterWidget.route, arguments: database);
+        .pushNamed(JobUpdaterWidget.route, arguments: jobUpdateArgument);
   }
 
   static String route = 'jobUpdater/';
 
   Future<void> createJob(BuildContext context) async {
     try {
-      Job? job = context.read<SelectedJobProvider>().job;
-      if (job != null) {
-        await context.read<Database>().createJob(job);
-      }
+      await selectedJobProvider.updateJobInDatabase();
+      Navigator.of(context).pop();
     } catch (error) {
       rethrow;
     }
@@ -32,36 +47,41 @@ class JobUpdaterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: MultiProvider(
-        providers: [
-          Provider<SelectedJobProvider>(
-            create: (BuildContext context) {
-              return SelectedJobProvider();
-            },
-          ),
-          Provider<Database>.value(value: database),
-        ],
-        child: Body(),
-      ),
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text('Update job'),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(Icons.close),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SelectedJobProvider>.value(
+          value: selectedJobProvider,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => createJob(context),
-            child: Text(
-              'Save',
-              style: TextStyle(color: Colors.white, fontSize: 18),
+      ],
+      child: Scaffold(
+        body: Body(),
+        backgroundColor: Colors.grey[200],
+        appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, kToolbarHeight),
+          child: Builder(
+            builder: (BuildContext context) => AppBar(
+              title: Text(job != null ? 'Update job' : 'Add new job'),
+              leading: IconButton(
+                onPressed: context.watch<SelectedJobProvider>().loading
+                    ? null
+                    : () => Navigator.of(context).pop(),
+                icon: Icon(Icons.close),
+                disabledColor: Colors.white,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: context.watch<SelectedJobProvider>().loading
+                      ? null
+                      : () => createJob(context),
+                  child: Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

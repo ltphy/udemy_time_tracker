@@ -43,7 +43,7 @@ class DoubleValidator extends NonEmptyFieldValidator {
         return number != null;
       }
     }
-    return true;
+    return result;
   }
 }
 

@@ -1,11 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
+import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
-class SelectedJobProvider {
-  late final Job? job;
+class SelectedJobProvider extends ChangeNotifier {
+  Job job;
+  late final Database database;
+  bool loading;
+  final formKey = GlobalKey<FormState>();
 
-  SelectedJobProvider({this.job});
+  SelectedJobProvider({
+    required this.job,
+    required this.database,
+    this.loading = false,
+  });
 
-  void updateJob(Job job) {
-    this.job = job;
+  Future<void> updateJobInDatabase() async {
+    try {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+        this.updateWith(loading: true);
+        await this.database.updateJob(this.job);
+      }
+    } finally {
+      this.updateWith(loading: false);
+    }
+  }
+
+  void updateWith({bool? loading, Job? job}) {
+    this.loading = loading ?? this.loading;
+    this.job = job ?? this.job;
+    notifyListeners();
+  }
+
+  void updateJob({String? name, double? ratePerHour}) {
+    this.job.name = name ?? this.job.name;
+    this.job.ratePerHour = ratePerHour ?? this.job.ratePerHour;
   }
 }
