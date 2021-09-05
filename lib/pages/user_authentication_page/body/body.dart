@@ -66,7 +66,6 @@ class _BodyState extends State<Body> {
           await context.read<AuthenticateProvider>().auth.signInWithGoogle();
     } on Exception catch (error) {
       await DialogService.instance.showExceptionDialog(context, error);
-    } finally {
       context.read<LoadingProvider>().updateLoading();
     }
   }

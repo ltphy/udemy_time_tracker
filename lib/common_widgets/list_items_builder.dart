@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_timer_tracker/common_widgets/empty_container.dart';
 
-typedef ItemWidgetBuilder<T> = Widget Function(T value);
+typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T value);
 
 class ListItemsBuilder<T> extends StatelessWidget {
   final ItemWidgetBuilder<T> itemWidgetBuilder;
@@ -40,9 +40,11 @@ class ListItemsBuilder<T> extends StatelessWidget {
   Widget buildList(List<T> items) {
     return ListView.separated(
       itemCount: items.length,
-      itemBuilder: (context, index) => itemWidgetBuilder(items[index]),
+      itemBuilder: (context, index) => itemWidgetBuilder(context, items[index]),
       separatorBuilder: (BuildContext context, int index) {
-        return Divider();
+        return Divider(
+          height: 0.5,
+        );
       },
     );
   }
