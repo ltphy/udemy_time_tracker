@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/pages/home/jobs_page.dart';
 import 'package:udemy_timer_tracker/pages/user_authentication_page/user_auththentication_page.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
-import 'package:udemy_timer_tracker/provider/loading_provider.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 class LandingPage extends StatelessWidget {
@@ -20,6 +19,7 @@ class LandingPage extends StatelessWidget {
           if (user == null) {
             return UserAuthenticationPage();
           } else {
+            print('User uid ${user.uid}');
             return Provider<Database>(
               create: (BuildContext context) =>
                   FirestoreDatabase(uid: user.uid),

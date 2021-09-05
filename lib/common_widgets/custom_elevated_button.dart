@@ -24,24 +24,17 @@ class CustomElevatedButton extends StatelessWidget {
     final bgColor = this.bgColor;
     final fgColor = this.fgColor;
     return SizedBox(
-      height: this.height,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: bgColor != null
-              ? MaterialStateProperty.all<Color>(bgColor)
-              : null,
-          foregroundColor: fgColor != null
-              ? MaterialStateProperty.all<Color>(fgColor)
-              : null,
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
+        height: this.height,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: bgColor,
+            onPrimary: fgColor,
+            shape: RoundedRectangleBorder(
                 borderRadius:
                     BorderRadius.all(Radius.circular(this.borderRadius))),
           ),
-        ),
-        onPressed: this.onSignIn,
-        child: child,
-      ),
-    );
+          onPressed: this.onSignIn,
+          child: child,
+        ));
   }
 }

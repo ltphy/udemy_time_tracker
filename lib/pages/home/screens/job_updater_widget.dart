@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
 import 'package:udemy_timer_tracker/provider/selected_job_provider.dart';
+import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 import 'body/body.dart';
@@ -40,8 +42,12 @@ class JobUpdaterWidget extends StatelessWidget {
     try {
       await selectedJobProvider.updateJobInDatabase();
       Navigator.of(context).pop();
-    } catch (error) {
-      rethrow;
+    } on FirebaseException catch (error) {
+      DialogService.instance.showMyDialog(
+        context,
+        message: error.message ?? 'Cannot save job ',
+        defaultActionText: 'OK',
+      );
     }
   }
 

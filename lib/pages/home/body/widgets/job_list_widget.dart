@@ -4,31 +4,28 @@ import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
-class JobListWidget extends StatelessWidget {
-  final List<Job> jobs;
+class JobItemWidget extends StatelessWidget {
+  final Job job;
+  final VoidCallback onPress;
+  final void Function(DismissDirection dismissDirection)? onDismissed;
 
-  const JobListWidget({Key? key, required this.jobs}) : super(key: key);
+  const JobItemWidget(
+      {Key? key, required this.job, required this.onPress, this.onDismissed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Database database = Provider.of<Database>(context, listen: false);
-    return Container(
-      child: ListView.builder(
-        itemBuilder: (_, index) {
-          return ListTile(
-            onTap: () => JobUpdaterWidget.show(
-              context,
-              database: database,
-              job: jobs[index],
-            ),
-            title: Text(
-              jobs[index].name ?? '',
-            ),
-            trailing: Icon(Icons.arrow_right),
-          );
-        },
-        itemCount: jobs.length,
+    return Dismissible(
+      key: Key(job.id),
+      child: ListTile(
+        title: Text(job.name ?? ''),
+        onTap: this.onPress,
+        trailing: Icon(Icons.chevron_right),
       ),
+      background: Container(
+        color: Colors.red,
+      ),
+      onDismissed: this.onDismissed,
     );
   }
 }

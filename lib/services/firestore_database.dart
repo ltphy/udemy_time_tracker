@@ -20,11 +20,11 @@ class FirestoreDatabase extends Database {
   });
 
   @override
-  Future<void> deleteJob(Job job) async {
-    final path = APIPath.job(this.uid, job.id);
-    final documentReference = FirebaseFirestore.instance.doc(path);
-    await documentReference.delete();
-  }
+  Future<void> deleteJob(Job job) async => await _service.removeData(
+          path: APIPath.job(
+        this.uid,
+        job.id,
+      ));
 
   @override
   Future<void> updateJob(Job job) async => await _service.setData(

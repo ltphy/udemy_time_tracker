@@ -56,7 +56,7 @@ class DialogService {
 
   String _handleMessage(Exception exception) {
     if (exception is FirebaseAuthException) {
-      return exception.message.toString();
+      return exception.message ?? 'Exception while sign in';
     }
     return exception.toString();
   }

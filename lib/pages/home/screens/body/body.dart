@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/common_widgets/custom_progress_indicator.dart';
 import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
 import 'package:udemy_timer_tracker/provider/selected_job_provider.dart';
+import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/validators.dart';
 
 class Body extends StatefulWidget {
@@ -47,8 +49,12 @@ class _BodyState extends State<Body> with JobValidators {
     try {
       await context.read<SelectedJobProvider>().updateJobInDatabase();
       Navigator.of(context).pop();
-    } catch (error) {
-      print(error);
+    } on FirebaseException catch (error) {
+      DialogService.instance.showMyDialog(
+        context,
+        message: error.message ?? 'Cannot save job',
+        defaultActionText: 'OK',
+      );
     }
   }
 
@@ -108,7 +114,6 @@ class _BodyState extends State<Body> with JobValidators {
                               labelText: 'Rate Per Hour',
                               border: UnderlineInputBorder(),
                             ),
-                            // validator: model.validatePassword,
                             onEditingComplete: updateJob,
                             validator: validateRatePerHour,
                             textInputAction: TextInputAction.done,

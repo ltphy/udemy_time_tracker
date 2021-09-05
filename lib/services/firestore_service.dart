@@ -21,4 +21,9 @@ class FirestoreService {
     return snapshots.map(
         (snapshot) => snapshot.docs.map((doc) => builder(doc.data())).toList());
   }
+
+  Future<void> removeData({required String path}) async {
+    final documentReference = FirebaseFirestore.instance.doc(path);
+    await documentReference.delete();
+  }
 }

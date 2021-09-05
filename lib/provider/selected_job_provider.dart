@@ -21,6 +21,8 @@ class SelectedJobProvider extends ChangeNotifier {
         this.updateWith(loading: true);
         await this.database.updateJob(this.job);
       }
+    } catch (error) {
+      rethrow;
     } finally {
       this.updateWith(loading: false);
     }
