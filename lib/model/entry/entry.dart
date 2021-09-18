@@ -4,8 +4,8 @@ part 'entry.g.dart';
 
 @JsonSerializable()
 class Entry {
-  final int id;
-  final int jobId;
+  final String id;
+  final String jobId;
   final DateTime start;
   final DateTime end;
   final String? comment;

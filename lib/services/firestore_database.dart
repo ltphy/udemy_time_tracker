@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:udemy_timer_tracker/model/entry/entry.dart';
 import 'package:udemy_timer_tracker/model/job.dart';
 import 'package:udemy_timer_tracker/services/api_path.dart';
@@ -12,8 +11,10 @@ abstract class Database {
   Stream<List<Job>?> streamJobs();
 
   Future<void> updateEntry(Entry entry);
-  Future<void> deleteEntry(Job job);
-  Stream<List<Entry>?> streamEntries();
+
+  Future<void> deleteEntry(Entry entry);
+
+  Stream<List<Entry>?> streamEntries(Job job);
 }
 
 class FirestoreDatabase extends Database {
@@ -44,20 +45,23 @@ class FirestoreDatabase extends Database {
       );
 
   @override
-  Future<void> deleteEntry(Job job) {
-    // TODO: implement deleteEntry
-    throw UnimplementedError();
-  }
+  Future<void> deleteEntry(Entry entry) async =>
+      await _service.removeData(path: APIPath.entry(this.uid, entry.id));
 
   @override
-  Stream<List<Entry>?> streamEntries() {
-    // TODO: implement streamEntries
-    throw UnimplementedError();
-  }
+  Stream<List<Entry>?> streamEntries(Job job) => _service.streamCollections(
+        path: APIPath.entries(this.uid),
+        builder: (value) => Entry.fromJson(value),
+        queryBuilder: (query) => query.where(
+          'jobId',
+          isEqualTo: job.id,
+        ),
+        compare: (Entry lhs, Entry rhs) => lhs.start.compareTo(rhs.start),
+      );
 
   @override
-  Future<void> updateEntry(Entry entry) {
-    // TODO: implement updateEntry
-    throw UnimplementedError();
-  }
+  Future<void> updateEntry(Entry entry) async => await _service.setData(
+        path: APIPath.entry(this.uid, entry.id),
+        data: entry.toJson(),
+      );
 }
