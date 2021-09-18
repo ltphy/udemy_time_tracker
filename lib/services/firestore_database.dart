@@ -14,7 +14,7 @@ abstract class Database {
 
   Future<void> deleteEntry(Entry entry);
 
-  Stream<List<Entry>?> streamEntries(Job job);
+  Stream<List<Entry>?> streamEntries({Job? job});
 }
 
 class FirestoreDatabase extends Database {
@@ -49,13 +49,15 @@ class FirestoreDatabase extends Database {
       await _service.removeData(path: APIPath.entry(this.uid, entry.id));
 
   @override
-  Stream<List<Entry>?> streamEntries(Job job) => _service.streamCollections(
+  Stream<List<Entry>?> streamEntries({Job? job}) => _service.streamCollections(
         path: APIPath.entries(this.uid),
         builder: (value) => Entry.fromJson(value),
-        queryBuilder: (query) => query.where(
-          'jobId',
-          isEqualTo: job.id,
-        ),
+        queryBuilder: job != null
+            ? (query) => query.where(
+                  'jobId',
+                  isEqualTo: job.id,
+                )
+            : null,
         compare: (Entry lhs, Entry rhs) => lhs.start.compareTo(rhs.start),
       );
 

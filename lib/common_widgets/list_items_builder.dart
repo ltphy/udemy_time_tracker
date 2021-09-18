@@ -16,6 +16,7 @@ class ListItemsBuilder<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // custom widget
+    print(snapshot.hasError);
     if (snapshot.hasData) {
       final List<T>? data = snapshot.data;
       if (data != null && data.isNotEmpty) {

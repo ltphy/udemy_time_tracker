@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/model/job.dart';
+import 'package:udemy_timer_tracker/pages/entry_page/entry_page.dart';
 import 'package:udemy_timer_tracker/pages/job_updater_widget/job_updater_widget.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
@@ -26,24 +28,31 @@ class Entries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Body(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        title: Text('Entries'),
-        actions: [
-          TextButton(
-            onPressed: () =>
-                JobUpdaterWidget.show(context, database: database, job: job),
-            child: Text(
-              'Edit',
-              style: TextStyle(color: Colors.white),
+    return MultiProvider(
+      providers: [
+        Provider<Database>.value(value: database),
+      ],
+      child: Scaffold(
+        body: Body(
+          job: this.job,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => EntryPage.show(context, database: database),
+          child: Icon(Icons.add),
+        ),
+        appBar: AppBar(
+          title: Text('Entries'),
+          actions: [
+            TextButton(
+              onPressed: () =>
+                  JobUpdaterWidget.show(context, database: database, job: job),
+              child: Text(
+                'Edit',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

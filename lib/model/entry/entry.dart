@@ -6,9 +6,9 @@ part 'entry.g.dart';
 class Entry {
   final String id;
   final String jobId;
-  final DateTime start;
-  final DateTime end;
-  final String? comment;
+  DateTime start;
+  DateTime end;
+  String? comment;
 
   Entry({
     required this.id,
