@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
+import 'package:udemy_timer_tracker/model/job.dart';
 import 'package:udemy_timer_tracker/provider/selected_job_provider.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
@@ -15,18 +15,15 @@ class JobUpdateArgument {
   JobUpdateArgument({required this.database, this.job});
 }
 
-class JobUpdaterWidget extends StatelessWidget {
+class JobUpdaterWidget extends StatefulWidget {
   final Database database;
   final Job? job;
-  late SelectedJobProvider selectedJobProvider;
 
-  JobUpdaterWidget({Key? key, required this.database, this.job})
-      : super(key: key) {
-    selectedJobProvider = SelectedJobProvider(
-      job: job ?? Job(id: documentIdFromCurrentDate()),
-      database: database,
-    );
-  }
+  JobUpdaterWidget({
+    Key? key,
+    required this.database,
+    this.job,
+  }) : super(key: key);
 
   static Future<void> show(BuildContext context,
       {required Database database, Job? job}) async {
@@ -37,6 +34,13 @@ class JobUpdaterWidget extends StatelessWidget {
   }
 
   static String route = 'jobUpdater/';
+
+  @override
+  State<JobUpdaterWidget> createState() => _JobUpdaterWidgetState();
+}
+
+class _JobUpdaterWidgetState extends State<JobUpdaterWidget> {
+  late SelectedJobProvider selectedJobProvider;
 
   Future<void> createJob(BuildContext context) async {
     try {
@@ -49,6 +53,15 @@ class JobUpdaterWidget extends StatelessWidget {
         defaultActionText: 'OK',
       );
     }
+  }
+
+  @override
+  void initState() {
+    selectedJobProvider = SelectedJobProvider(
+      job: widget.job ?? Job(id: documentIdFromCurrentDate()),
+      database: widget.database,
+    );
+    super.initState();
   }
 
   @override
@@ -66,7 +79,7 @@ class JobUpdaterWidget extends StatelessWidget {
           preferredSize: const Size(double.infinity, kToolbarHeight),
           child: Builder(
             builder: (BuildContext context) => AppBar(
-              title: Text(job != null ? 'Update job' : 'Add new job'),
+              title: Text(widget.job != null ? 'Update job' : 'Add new job'),
               leading: IconButton(
                 onPressed: context.watch<SelectedJobProvider>().loading
                     ? null

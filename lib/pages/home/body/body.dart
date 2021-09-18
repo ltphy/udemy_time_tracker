@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/common_widgets/list_items_builder.dart';
-import 'package:udemy_timer_tracker/pages/home/body/widgets/job_list_widget.dart';
-import 'package:udemy_timer_tracker/pages/home/screens/job_updater_widget.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_timer_tracker/common_widgets/list_items_builder.dart';
+import 'package:udemy_timer_tracker/model/job.dart';
+import 'package:udemy_timer_tracker/pages/entries/entries.dart';
+import 'package:udemy_timer_tracker/pages/home/body/widgets/job_list_widget.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
@@ -36,7 +36,7 @@ class Body extends StatelessWidget {
               direction: DismissDirection.endToStart,
               child: JobItemWidget(
                 job: value,
-                onPress: () => JobUpdaterWidget.show(
+                onPress: () => Entries.show(
                   context,
                   database: firestoreDatabase,
                   job: value,

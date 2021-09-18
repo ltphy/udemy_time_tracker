@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:udemy_timer_tracker/pages/home/screens/job_updater_widget.dart';
+import 'package:udemy_timer_tracker/pages/job_updater_widget/job_updater_widget.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';

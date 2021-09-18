@@ -58,10 +58,11 @@ class Auth extends BaseAuth {
       final googleAuth = await googleUser.authentication;
       // accesstoken to send to firebase auth with id token
       if (googleAuth.idToken != null) {
-        final userCredential = await _firebaseAuth.signInWithCredential(
-            GoogleAuthProvider.credential(
-                idToken: googleAuth.idToken,
-                accessToken: googleAuth.accessToken));
+        final userCredential = await _firebaseAuth
+            .signInWithCredential(GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+          accessToken: googleAuth.accessToken,
+        ));
         return userCredential.user;
       } else {
         // Missing google ID token

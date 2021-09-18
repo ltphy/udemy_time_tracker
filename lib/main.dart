@@ -2,14 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/common_widgets/custom_progress_indicator.dart';
-import 'package:udemy_timer_tracker/pages/home/screens/job_updater_widget.dart';
 import 'package:udemy_timer_tracker/pages/landing_page/landing_page.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
-import 'package:udemy_timer_tracker/services/firestore_database.dart';
+import 'package:udemy_timer_tracker/routes.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
-
-import 'provider/loading_provider.dart';
 
 void main() {
   //set up widget binding flutter.
@@ -54,22 +50,7 @@ class _MyAppState extends State<MyApp> {
                 primarySwatch: Colors.blue,
               ),
               home: LandingPage(),
-              onGenerateRoute: (settings) {
-                String? routeName = settings.name;
-                if (routeName == null) return null;
-                if (routeName == JobUpdaterWidget.route) {
-                  final args = settings.arguments as JobUpdateArgument;
-                  return MaterialPageRoute(
-                    builder: (context) {
-                      return JobUpdaterWidget(
-                        database: args.database,
-                        job: args.job,
-                      );
-                    },
-                    fullscreenDialog: true,
-                  );
-                }
-              },
+              onGenerateRoute: RouteConfiguration.onGenerateRoute,
             ),
           );
         }

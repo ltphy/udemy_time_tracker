@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/common_widgets/custom_progress_indicator.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
+import 'package:udemy_timer_tracker/model/job.dart';
 import 'package:udemy_timer_tracker/provider/selected_job_provider.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/validators.dart';

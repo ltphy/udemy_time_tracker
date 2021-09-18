@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
+import 'package:udemy_timer_tracker/model/job.dart';
 
 class JobItemWidget extends StatelessWidget {
   final Job job;

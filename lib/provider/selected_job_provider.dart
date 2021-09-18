@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
+import 'package:udemy_timer_tracker/model/job.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 class SelectedJobProvider extends ChangeNotifier {
@@ -23,8 +23,6 @@ class SelectedJobProvider extends ChangeNotifier {
       }
     } catch (error) {
       rethrow;
-    } finally {
-      this.updateWith(loading: false);
     }
   }
 

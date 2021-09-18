@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:udemy_timer_tracker/pages/sign_in_page/model/job.dart';
+import 'package:udemy_timer_tracker/model/entry/entry.dart';
+import 'package:udemy_timer_tracker/model/job.dart';
 import 'package:udemy_timer_tracker/services/api_path.dart';
 import 'package:udemy_timer_tracker/services/firestore_service.dart';
 
@@ -9,6 +10,10 @@ abstract class Database {
   Future<void> deleteJob(Job job);
 
   Stream<List<Job>?> streamJobs();
+
+  Future<void> updateEntry(Entry entry);
+  Future<void> deleteEntry(Job job);
+  Stream<List<Entry>?> streamEntries();
 }
 
 class FirestoreDatabase extends Database {
@@ -37,4 +42,22 @@ class FirestoreDatabase extends Database {
         path: APIPath.jobs(this.uid),
         builder: (value) => Job.fromJson(value),
       );
+
+  @override
+  Future<void> deleteEntry(Job job) {
+    // TODO: implement deleteEntry
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<Entry>?> streamEntries() {
+    // TODO: implement streamEntries
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateEntry(Entry entry) {
+    // TODO: implement updateEntry
+    throw UnimplementedError();
+  }
 }

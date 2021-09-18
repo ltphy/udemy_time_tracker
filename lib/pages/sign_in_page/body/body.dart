@@ -41,11 +41,6 @@ class _BodyState extends State<Body> {
   final FocusNode passwordFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _emailEditingComplete() {
     FocusScope.of(context).requestFocus(passwordFocusNode);
   }
@@ -60,7 +55,6 @@ class _BodyState extends State<Body> {
           this._passwordEditingController.text);
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (error) {
-      print('error');
       await DialogService.instance.showExceptionDialog(context, error);
     }
   }
