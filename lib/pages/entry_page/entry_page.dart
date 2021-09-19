@@ -37,10 +37,6 @@ class EntryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Body(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
-      ),
       appBar: AppBar(
         title: Text('Entries'),
         actions: [

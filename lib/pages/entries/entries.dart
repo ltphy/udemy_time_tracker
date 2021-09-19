@@ -49,7 +49,10 @@ class Entries extends StatelessWidget {
                   JobUpdaterWidget.show(context, database: database, job: job),
               child: Text(
                 'Edit',
-                style: TextStyle(color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    ?.copyWith(color: Colors.white),
               ),
             ),
           ],

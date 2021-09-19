@@ -79,18 +79,7 @@ class EntryItemWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          entry.startTime(context),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              ?.copyWith(fontSize: 18),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Text('-'),
-                        ),
-                        Text(
-                          entry.endTime(context),
+                          '${entry.startTime(context)} - ${entry.endTime(context)}',
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1
@@ -101,7 +90,8 @@ class EntryItemWidget extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodyText1),
                       ],
                     ),
-                    Text(entry.comment ?? '', style: Theme.of(context).textTheme.bodyText1),
+                    Text(entry.comment ?? '',
+                        style: Theme.of(context).textTheme.bodyText1),
                   ],
                 ),
               ),
