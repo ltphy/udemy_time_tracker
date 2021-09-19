@@ -13,12 +13,12 @@ class Format {
   }
 
   String date(DateTime date) {
-    final dateFormat = DateFormat.yMMMMd('en_US');
+    final dateFormat = DateFormat.yMMMd('en_US');
     return dateFormat.format(date);
   }
 
   String dayOfWeek(DateTime date) {
-    final dateFormat = DateFormat.EEEE();
+    final dateFormat = DateFormat.E();
     return dateFormat.format(date);
   }
 

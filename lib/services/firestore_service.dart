@@ -29,18 +29,30 @@ class FirestoreService {
         queryBuilder,
     int Function(T lhs, T rhs)? compare,
   }) {
+    print(path);
+    print(1);
     Query<Map<String, dynamic>> query =
         FirebaseFirestore.instance.collection(path);
+    print(2);
     if (queryBuilder != null) {
       // query the collection from path
       query = queryBuilder(query);
     }
+    print(3);
+    DateTime time = DateTime(2021);
+    print(time.toIso8601String());
     final snapshots = query.snapshots();
+    print(4);
     return snapshots.map((event) {
       final result = event.docs
-          .map((e) => builder(e.data()))
+          .map((e) {
+            print(e.data());
+            return builder(e.data());
+          })
           .where((element) => element != null)
           .toList();
+      print(5);
+      print(result);
       if (compare != null) {
         result.sort(compare);
       }

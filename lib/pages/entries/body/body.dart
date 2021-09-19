@@ -19,7 +19,10 @@ class Body extends StatelessWidget {
       builder: (_, snapshot) {
         return ListItemsBuilder<Entry>(
           itemWidgetBuilder: (context, entry) {
-            return EntryItemWidget(entry: entry);
+            return EntryItemWidget(
+              entry: entry,
+              job: this.job,
+            );
           },
           snapshot: snapshot,
         );

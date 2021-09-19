@@ -28,6 +28,7 @@ class Entries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('this ${this.job.id}');
     return MultiProvider(
       providers: [
         Provider<Database>.value(value: database),

@@ -27,7 +27,6 @@ class EntryPage extends StatelessWidget {
 
   static show(BuildContext context,
       {Entry? entry, required Database database}) async {
-    print('call');
     EntryArgument entryArguments =
         EntryArgument(database: database, entry: entry);
     await Navigator.of(context)

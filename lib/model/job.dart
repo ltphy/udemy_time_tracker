@@ -5,12 +5,12 @@ part 'job.g.dart';
 @JsonSerializable()
 class Job {
   String? name;
-  double? ratePerHour;
+  double ratePerHour;
   String id;
 
   Job({
     this.name,
-    this.ratePerHour,
+    this.ratePerHour = 0.0,
     required this.id,
   });
 
