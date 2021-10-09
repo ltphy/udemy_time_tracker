@@ -6,7 +6,6 @@ import 'package:udemy_timer_tracker/pages/landing_page/landing_page.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:udemy_timer_tracker/routes.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
-
 void main() {
   //set up widget binding flutter.
   // ensure initialized

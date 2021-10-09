@@ -51,13 +51,6 @@ class RouteConfiguration {
         return LandingPage();
       },
     ),
-    Path(
-      route: LandingPage.route,
-      builder: (context, settings) {
-        final args = settings.arguments as EntryArgument;
-        return EntryPage(database: args.database, entry: args.entry);
-      },
-    ),
   ];
 
   static Route<dynamic>? handleGenericPath(RouteSettings settings) {
@@ -71,7 +64,11 @@ class RouteConfiguration {
       return MaterialPageRoute(
         builder: (context) {
           final args = settings.arguments as EntryArgument;
-          return EntryPage(database: args.database, entry: args.entry);
+          return EntryPage(
+            database: args.database,
+            entry: args.entry,
+            job: args.job,
+          );
         },
         settings: settings,
       );

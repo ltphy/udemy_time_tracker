@@ -28,7 +28,6 @@ class Entries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('this ${this.job.id}');
     return MultiProvider(
       providers: [
         Provider<Database>.value(value: database),
@@ -38,7 +37,8 @@ class Entries extends StatelessWidget {
           job: this.job,
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => EntryPage.show(context, database: database),
+          onPressed: () =>
+              EntryPage.show(context, database: database, job: job),
           child: Icon(Icons.add),
         ),
         appBar: AppBar(

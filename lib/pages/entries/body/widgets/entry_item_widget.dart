@@ -29,19 +29,25 @@ class EntryItemWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Database database = Provider.of<Database>(context, listen: false);
-          EntryPage.show(context, database: database, entry: entry);
+          EntryPage.show(
+            context,
+            database: database,
+            entry: entry,
+            job: job,
+          );
         },
         child: Container(
           padding: EdgeInsets.all(
             8,
           ),
           decoration: BoxDecoration(
-              border: Border(
-            bottom: BorderSide(
-              width: 0.5,
-              color: Colors.grey,
+            border: Border(
+              bottom: BorderSide(
+                width: 0.5,
+                color: Colors.grey,
+              ),
             ),
-          )),
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
