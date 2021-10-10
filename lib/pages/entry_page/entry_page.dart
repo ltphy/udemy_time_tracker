@@ -46,6 +46,7 @@ class EntryPage extends StatelessWidget {
 
   Future<void> updateEntry(BuildContext context) async {
     await context.read<SelectedEntryProvider>().updateEntryInDatabase();
+    Navigator.of(context).pop();
   }
 
   @override

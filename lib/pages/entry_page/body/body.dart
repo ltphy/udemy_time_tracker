@@ -40,12 +40,12 @@ class _BodyState extends State<Body> {
         return DateTimePicker(
           onSelectedTime: (TimeOfDay value) => context
               .read<SelectedEntryProvider>()
-              .updateEntry(startTime: value),
+              .updateEntry(endTime: value),
           labelText: 'End',
           selectedDate: value.item1,
           onSelectedDate: (DateTime value) => context
               .read<SelectedEntryProvider>()
-              .updateEntry(startDate: value),
+              .updateEntry(endDate: value),
           selectedTime: value.item2,
         );
       },

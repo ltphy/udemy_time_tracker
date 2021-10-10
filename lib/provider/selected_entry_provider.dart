@@ -26,7 +26,7 @@ class SelectedEntryProvider extends ChangeNotifier {
     this.startDate =
         DateTime(currentDate.year, currentDate.month, currentDate.day);
     this.startTime = TimeOfDay.fromDateTime(currentDate);
-    final endCurrentDate = this.entry?.start ?? DateTime.now();
+    final endCurrentDate = this.entry?.end ?? DateTime.now();
     this.endDate =
         DateTime(endCurrentDate.year, endCurrentDate.month, endCurrentDate.day);
     this.endTime = TimeOfDay.fromDateTime(endCurrentDate);
@@ -88,5 +88,5 @@ class SelectedEntryProvider extends ChangeNotifier {
   }
 
   double get duration =>
-      this.startDateTime.difference(endDateTime).inMinutes / 60;
+      this.endDateTime.difference(startDateTime).inMinutes / 60;
 }
