@@ -4,10 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/common_widgets/custom_progress_indicator.dart';
 import 'package:udemy_timer_tracker/pages/landing_page/landing_page.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
+import 'package:udemy_timer_tracker/routes.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
-
-import 'provider/loading_provider.dart';
-
 void main() {
   //set up widget binding flutter.
   // ensure initialized
@@ -51,6 +49,7 @@ class _MyAppState extends State<MyApp> {
                 primarySwatch: Colors.blue,
               ),
               home: LandingPage(),
+              onGenerateRoute: RouteConfiguration.onGenerateRoute,
             ),
           );
         }

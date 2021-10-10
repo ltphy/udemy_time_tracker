@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_timer_tracker/pages/job_updater_widget/job_updater_widget.dart';
+import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
+import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage();
+import 'body/body.dart';
+
+class JobsPage extends StatelessWidget {
+  JobsPage();
 
   static const String route = '/date-tracker';
 
@@ -12,7 +16,6 @@ class HomePage extends StatelessWidget {
     try {
       await context.read<AuthenticateProvider>().auth.signOut();
     } catch (error) {
-      // print(error.toString());
       await DialogService.instance.showMyDialog(
         context,
         message: error.toString(),
@@ -38,7 +41,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(),
+      body: Body(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          final database = Provider.of<Database>(context, listen: false);
+          JobUpdaterWidget.show(context, database: database);
+        },
+      ),
       appBar: AppBar(
         title: Text('Home Page'),
         actions: [

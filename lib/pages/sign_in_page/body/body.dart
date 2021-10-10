@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +39,6 @@ class _BodyState extends State<Body> {
       TextEditingController();
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
-
   final _formKey = GlobalKey<FormState>();
 
   void _emailEditingComplete() {
@@ -49,11 +50,11 @@ class _BodyState extends State<Body> {
       if (!this._formKey.currentState!.validate()) {
         return;
       }
+
       await widget.bloc.submit(this._emailEditingController.text,
           this._passwordEditingController.text);
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (error) {
-      print('error');
       await DialogService.instance.showExceptionDialog(context, error);
     }
   }
@@ -75,7 +76,6 @@ class _BodyState extends State<Body> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         final EmailSignInModel model = snapshot.data;
         bool? isLoading = model.isLoading;
-        print('rerender');
         return (isLoading != null && isLoading)
             ? Center(
                 child: CircularProgressIndicator(),
@@ -133,7 +133,6 @@ class _BodyState extends State<Body> {
                               this._emailEditingController.clear();
                               this._passwordEditingController.clear();
                               this._formKey.currentState!.reset();
-                              print('toggle button');
                               widget.bloc.toggleButtonSwitch();
                             },
                             child: Text(model.switchFormText),

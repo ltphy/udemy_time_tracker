@@ -25,10 +25,11 @@ class SocialSignInButton extends CustomElevatedButton {
             children: [
               Image.asset(imageAsset),
               Expanded(
-                  child: Text(
-                title,
-                textAlign: TextAlign.center,
-              )),
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
         );

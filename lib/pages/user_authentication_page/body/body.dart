@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -42,13 +41,11 @@ class _BodyState extends State<Body> {
       context.read<LoadingProvider>().updateLoading();
       final user =
           await context.read<AuthenticateProvider>().auth.signInWithFacebook();
-      print('json ${user?.email} ${user?.displayName} ${user?.email}');
       final accessToken = await FacebookAuth.instance.accessToken;
       if (accessToken != null) {
         final userData = await FacebookAuth.instance.getUserData(
           fields: "email,birthday,friends,gender,link",
         );
-        print(jsonEncode(userData));
       }
     } on Exception catch (error) {
       await DialogService.instance.showExceptionDialog(context, error);
@@ -66,7 +63,6 @@ class _BodyState extends State<Body> {
           await context.read<AuthenticateProvider>().auth.signInWithGoogle();
     } on Exception catch (error) {
       await DialogService.instance.showExceptionDialog(context, error);
-    } finally {
       context.read<LoadingProvider>().updateLoading();
     }
   }
