@@ -133,7 +133,6 @@ class _BodyState extends State<Body> {
                               this._emailEditingController.clear();
                               this._passwordEditingController.clear();
                               this._formKey.currentState!.reset();
-                              print('toggle button');
                               widget.bloc.toggleButtonSwitch();
                             },
                             child: Text(model.switchFormText),

@@ -41,13 +41,11 @@ class _BodyState extends State<Body> {
       context.read<LoadingProvider>().updateLoading();
       final user =
           await context.read<AuthenticateProvider>().auth.signInWithFacebook();
-      print('json ${user?.email} ${user?.displayName} ${user?.email}');
       final accessToken = await FacebookAuth.instance.accessToken;
       if (accessToken != null) {
         final userData = await FacebookAuth.instance.getUserData(
           fields: "email,birthday,friends,gender,link",
         );
-        print(jsonEncode(userData));
       }
     } on Exception catch (error) {
       await DialogService.instance.showExceptionDialog(context, error);

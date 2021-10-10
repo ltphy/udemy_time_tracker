@@ -25,6 +25,7 @@ class EntryItemWidget extends StatelessWidget {
     return Dismissible(
       key: ValueKey(entry.id),
       direction: DismissDirection.endToStart,
+
       onDismissed: (DismissDirection dismissDirection) => removeEntry(context),
       child: InkWell(
         onTap: () {

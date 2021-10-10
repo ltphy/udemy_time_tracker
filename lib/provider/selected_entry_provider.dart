@@ -79,12 +79,15 @@ class SelectedEntryProvider extends ChangeNotifier {
     TimeOfDay? endTime,
     String? comment,
   }) {
-    this.comment = comment ?? this.comment;
     this.startDate = startDate ?? this.startDate;
     this.endDate = endDate ?? this.endDate;
     this.startTime = startTime ?? this.startTime;
     this.endTime = endTime ?? this.endTime;
     notifyListeners();
+  }
+
+  void updateComment(String comment) {
+    this.comment = comment;
   }
 
   double get duration =>

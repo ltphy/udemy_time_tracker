@@ -13,6 +13,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  TextEditingController? _commentEditingController;
 
   Widget buildStart() {
     return Selector<SelectedEntryProvider, Tuple2<DateTime, TimeOfDay>>(
@@ -34,18 +35,30 @@ class _BodyState extends State<Body> {
     );
   }
 
+  Widget commentWidget() {
+    return TextField(
+      controller: _commentEditingController,
+      keyboardType: TextInputType.text,
+      maxLength: 50,
+      decoration: InputDecoration(
+          labelText: 'Comment',
+          labelStyle: Theme.of(context).textTheme.headline6),
+      maxLines: null,
+      onChanged: (String value) =>
+          context.read<SelectedEntryProvider>().updateComment(value),
+    );
+  }
+
   Widget buildEnd() {
     return Selector<SelectedEntryProvider, Tuple2<DateTime, TimeOfDay>>(
       builder: (BuildContext context, value, _) {
         return DateTimePicker(
-          onSelectedTime: (TimeOfDay value) => context
-              .read<SelectedEntryProvider>()
-              .updateEntry(endTime: value),
+          onSelectedTime: (TimeOfDay value) =>
+              context.read<SelectedEntryProvider>().updateEntry(endTime: value),
           labelText: 'End',
           selectedDate: value.item1,
-          onSelectedDate: (DateTime value) => context
-              .read<SelectedEntryProvider>()
-              .updateEntry(endDate: value),
+          onSelectedDate: (DateTime value) =>
+              context.read<SelectedEntryProvider>().updateEntry(endDate: value),
           selectedTime: value.item2,
         );
       },
@@ -69,6 +82,22 @@ class _BodyState extends State<Body> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (this._commentEditingController == null) {
+      this._commentEditingController = TextEditingController(
+        text: context.read<SelectedEntryProvider>().comment,
+      );
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    this._commentEditingController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
@@ -86,6 +115,7 @@ class _BodyState extends State<Body> {
           SizedBox(
             height: 10,
           ),
+          this.commentWidget(),
         ],
       ),
     );

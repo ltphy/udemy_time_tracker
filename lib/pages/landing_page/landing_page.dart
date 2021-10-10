@@ -15,13 +15,11 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-        print(snapshot.connectionState);
         if (snapshot.connectionState == ConnectionState.active) {
           User? user = snapshot.data;
           if (user == null) {
             return UserAuthenticationPage();
           } else {
-            print('User uid ${user.uid}');
             return Provider<Database>(
               create: (BuildContext context) =>
                   FirestoreDatabase(uid: user.uid),
