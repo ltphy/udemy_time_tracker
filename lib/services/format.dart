@@ -11,7 +11,7 @@ class Format {
     final formatted = decimalPattern.format(hoursNotNegative);
     return '${formatted}h';
   }
-
+  // format2020 Jul 15
   String date(DateTime date) {
     final dateFormat = DateFormat.yMMMd('en_US');
     return dateFormat.format(date);

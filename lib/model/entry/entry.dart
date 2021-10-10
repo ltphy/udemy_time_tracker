@@ -44,4 +44,15 @@ class Entry {
   String endTime(BuildContext context) {
     return TimeOfDay.fromDateTime(end).format(context);
   }
+
+  Entry copyWith(
+      {DateTime? start, DateTime? end, TimeOfDay? time, String? comment}) {
+    return Entry(
+      id: this.id,
+      jobId: this.jobId,
+      start: start ?? this.start,
+      comment: comment ?? this.comment,
+      end: end ?? this.end,
+    );
+  }
 }

@@ -19,7 +19,7 @@ class InputDropdown extends StatelessWidget {
     return GestureDetector(
       child: InputDecorator(
         baseStyle: this.valueStyle,
-        decoration: InputDecoration(labelText: this.valueText),
+        decoration: InputDecoration(labelText: this.titleText ?? ''),
         child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
