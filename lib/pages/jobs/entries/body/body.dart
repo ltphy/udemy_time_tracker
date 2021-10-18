@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/common_widgets/list_items_builder.dart';
 import 'package:udemy_timer_tracker/model/entry/entry.dart';
 import 'package:udemy_timer_tracker/model/job.dart';
-import 'package:udemy_timer_tracker/pages/entries/body/widgets/entry_item_widget.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
+
+import 'widgets/entry_item_widget.dart';
 
 class Body extends StatelessWidget {
   final Job job;

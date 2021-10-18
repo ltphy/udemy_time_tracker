@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:udemy_timer_tracker/pages/job_updater_widget/job_updater_widget.dart';
+import 'package:udemy_timer_tracker/pages/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 import 'body/body.dart';
+import 'job_updater_widget/job_updater_widget.dart';
 
 class JobsPage extends StatelessWidget {
   JobsPage();
 
-  static const String route = '/date-tracker';
+  static const String route = '/';
 
   Future<void> signOut(BuildContext context) async {
     try {

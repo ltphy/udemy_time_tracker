@@ -6,6 +6,8 @@ import 'package:udemy_timer_tracker/pages/landing_page/landing_page.dart';
 import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:udemy_timer_tracker/routes.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
+
+import 'provider/select_bottom_navigation_provider.dart';
 void main() {
   //set up widget binding flutter.
   // ensure initialized
@@ -42,6 +44,9 @@ class _MyAppState extends State<MyApp> {
               Provider<AuthenticateProvider>(
                 create: (context) => AuthenticateProvider(auth: Auth()),
               ),
+              ChangeNotifierProvider<SelectBottomNavigationProvider>(
+                create: (context)=> SelectBottomNavigationProvider(),
+              )
             ],
             child: MaterialApp(
               title: 'Time Tracker',
@@ -49,7 +54,8 @@ class _MyAppState extends State<MyApp> {
                 primarySwatch: Colors.blue,
               ),
               home: LandingPage(),
-              onGenerateRoute: RouteConfiguration.onGenerateRoute,
+              onGenerateRoute: RouteConfiguration.onGenerateMainRoute,
+
             ),
           );
         }

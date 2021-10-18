@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/common_widgets/list_items_builder.dart';
 import 'package:udemy_timer_tracker/model/job.dart';
-import 'package:udemy_timer_tracker/pages/entries/entries.dart';
-import 'package:udemy_timer_tracker/pages/home/body/widgets/job_list_widget.dart';
+import 'package:udemy_timer_tracker/pages/jobs/body/widgets/job_list_widget.dart';
+import 'package:udemy_timer_tracker/pages/jobs/entries/entries.dart';
 import 'package:udemy_timer_tracker/services/dialog_services.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 

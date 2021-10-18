@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/model/entry/entry.dart';
 import 'package:udemy_timer_tracker/model/job.dart';
-import 'package:udemy_timer_tracker/pages/entry_page/entry_page.dart';
+import 'package:udemy_timer_tracker/pages/jobs/entry_page/entry_page.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 class EntryItemWidget extends StatelessWidget {
@@ -25,7 +25,6 @@ class EntryItemWidget extends StatelessWidget {
     return Dismissible(
       key: ValueKey(entry.id),
       direction: DismissDirection.endToStart,
-
       onDismissed: (DismissDirection dismissDirection) => removeEntry(context),
       child: InkWell(
         onTap: () {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/model/job.dart';
-import 'package:udemy_timer_tracker/pages/entry_page/entry_page.dart';
-import 'package:udemy_timer_tracker/pages/job_updater_widget/job_updater_widget.dart';
+import 'package:udemy_timer_tracker/pages/jobs/entry_page/entry_page.dart';
+import 'package:udemy_timer_tracker/pages/jobs/job_updater_widget/job_updater_widget.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 import 'body/body.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:udemy_timer_tracker/model/entry/entry.dart';
-import 'package:udemy_timer_tracker/pages/job_updater_widget/body/body.dart';
+import 'package:udemy_timer_tracker/pages/jobs/job_updater_widget/body/body.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 class SelectedEntryProvider extends ChangeNotifier {

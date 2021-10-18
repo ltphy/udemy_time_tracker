@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:udemy_timer_tracker/pages/job_updater_widget/job_updater_widget.dart';
+import 'package:udemy_timer_tracker/pages/jobs/job_updater_widget/job_updater_widget.dart';
+import 'package:udemy_timer_tracker/pages/jobs/jobs.dart';
+import 'package:udemy_timer_tracker/pages/jobs_entries/job_entries.dart';
 import 'package:udemy_timer_tracker/pages/landing_page/landing_page.dart';
 
+import 'pages/accounts/accounts.dart';
 import 'pages/empty_screen/empty_screen.dart';
-import 'pages/entries/entries.dart';
-import 'pages/entry_page/entry_page.dart';
+import 'pages/jobs/entries/entries.dart';
+import 'pages/jobs/entry_page/entry_page.dart';
 
 typedef PathWidgetBuilder = Widget Function(
     BuildContext context, RouteSettings settings);
@@ -20,6 +23,14 @@ class Path {
 }
 
 class RouteConfiguration {
+  static final List<Path> mainPaths = [
+    Path(
+      route: LandingPage.route,
+      builder: (context, settings) {
+        return LandingPage();
+      },
+    ),
+  ];
   static final List<Path> paths = [
     Path(
       route: JobUpdaterWidget.route,
@@ -46,9 +57,21 @@ class RouteConfiguration {
       },
     ),
     Path(
-      route: LandingPage.route,
+      route: Account.route,
       builder: (context, settings) {
-        return LandingPage();
+        return Account();
+      },
+    ),
+    Path(
+      route: JobsPage.route,
+      builder: (context, settings) {
+        return JobsPage();
+      },
+    ),
+    Path(
+      route: JobEntries.route,
+      builder: (context, settings) {
+        return JobEntries();
       },
     ),
   ];
@@ -78,6 +101,8 @@ class RouteConfiguration {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     for (Path path in paths) {
       if (path.route == settings.name) {
+        print('name ${settings.name}');
+
         return MaterialPageRoute(
           builder: (context) {
             return path.builder(context, settings);
@@ -88,6 +113,21 @@ class RouteConfiguration {
     }
     Route<dynamic>? route = handleGenericPath(settings);
     if (route != null) return route;
+    throw Exception('Invalid route ${settings.name}');
+  }
+
+  static Route<dynamic> onGenerateMainRoute(RouteSettings settings) {
+    for (Path path in mainPaths) {
+      if (path.route == settings.name) {
+        print('name ${settings.name}');
+        return MaterialPageRoute(
+          builder: (context) {
+            return path.builder(context, settings);
+          },
+          settings: settings,
+        );
+      }
+    }
     throw Exception('Invalid route ${settings.name}');
   }
 }
