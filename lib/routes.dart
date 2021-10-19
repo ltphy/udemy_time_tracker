@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:udemy_timer_tracker/pages/jobs/job_updater_widget/job_updater_widget.dart';
 import 'package:udemy_timer_tracker/pages/jobs/jobs.dart';
 import 'package:udemy_timer_tracker/pages/jobs_entries/job_entries.dart';
@@ -25,20 +26,23 @@ class Path {
 class RouteConfiguration {
   static final List<Path> mainPaths = [
     Path(
-      route: LandingPage.route,
-      builder: (context, settings) {
-        return LandingPage();
-      },
-    ),
-  ];
-  static final List<Path> paths = [
+        route: LandingPage.route,
+        builder: (context, settings) {
+          return Provider<NavigatorState>.value(
+            value: Navigator.of(context),
+            child: LandingPage(),
+          );
+        }),
     Path(
       route: JobUpdaterWidget.route,
       builder: (context, settings) {
         final args = settings.arguments as JobUpdateArgument;
-        return JobUpdaterWidget(
-          database: args.database,
-          job: args.job,
+        return Provider<NavigatorState>.value(
+          value: Navigator.of(context),
+          child: JobUpdaterWidget(
+            database: args.database,
+            job: args.job,
+          ),
         );
       },
     ),
@@ -48,14 +52,19 @@ class RouteConfiguration {
         final args = settings.arguments as JobUpdateArgument;
         final job = args.job;
         if (job != null) {
-          return Entries(
-            database: args.database,
-            job: job,
+          return Provider<NavigatorState>.value(
+            value: Navigator.of(context),
+            child: Entries(
+              database: args.database,
+              job: job,
+            ),
           );
         }
         return EmptyScreen();
       },
     ),
+  ];
+  static final List<Path> paths = [
     Path(
       route: Account.route,
       builder: (context, settings) {
@@ -87,10 +96,13 @@ class RouteConfiguration {
       return MaterialPageRoute(
         builder: (context) {
           final args = settings.arguments as EntryArgument;
-          return EntryPage(
-            database: args.database,
-            entry: args.entry,
-            job: args.job,
+          return Provider<NavigatorState>.value(
+            value: Navigator.of(context),
+            child: EntryPage(
+              database: args.database,
+              entry: args.entry,
+              job: args.job,
+            ),
           );
         },
         settings: settings,
@@ -111,8 +123,6 @@ class RouteConfiguration {
         );
       }
     }
-    Route<dynamic>? route = handleGenericPath(settings);
-    if (route != null) return route;
     throw Exception('Invalid route ${settings.name}');
   }
 
@@ -128,6 +138,8 @@ class RouteConfiguration {
         );
       }
     }
+    Route<dynamic>? route = handleGenericPath(settings);
+    if (route != null) return route;
     throw Exception('Invalid route ${settings.name}');
   }
 }

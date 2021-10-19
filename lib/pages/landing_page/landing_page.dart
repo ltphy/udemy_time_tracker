@@ -7,7 +7,7 @@ import 'package:udemy_timer_tracker/provider/auth_provider.dart';
 import 'package:udemy_timer_tracker/services/firestore_database.dart';
 
 class LandingPage extends StatelessWidget {
-  static final String route = '/landing-page';
+  static final String route = '/';
 
   const LandingPage({Key? key}) : super(key: key);
 

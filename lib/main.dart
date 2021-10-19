@@ -8,6 +8,7 @@ import 'package:udemy_timer_tracker/routes.dart';
 import 'package:udemy_timer_tracker/services/sign_in_services.dart';
 
 import 'provider/select_bottom_navigation_provider.dart';
+
 void main() {
   //set up widget binding flutter.
   // ensure initialized
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
                 create: (context) => AuthenticateProvider(auth: Auth()),
               ),
               ChangeNotifierProvider<SelectBottomNavigationProvider>(
-                create: (context)=> SelectBottomNavigationProvider(),
+                create: (context) => SelectBottomNavigationProvider(),
               )
             ],
             child: MaterialApp(
@@ -53,9 +54,8 @@ class _MyAppState extends State<MyApp> {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: LandingPage(),
+              initialRoute: LandingPage.route,
               onGenerateRoute: RouteConfiguration.onGenerateMainRoute,
-
             ),
           );
         }

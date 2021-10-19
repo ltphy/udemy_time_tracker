@@ -29,7 +29,8 @@ class JobUpdaterWidget extends StatefulWidget {
       {required Database database, Job? job}) async {
     JobUpdateArgument jobUpdateArgument =
         JobUpdateArgument(database: database, job: job);
-    await Navigator.of(context)
+    await context
+        .read<NavigatorState>()
         .pushNamed(JobUpdaterWidget.route, arguments: jobUpdateArgument);
   }
 

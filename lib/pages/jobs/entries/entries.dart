@@ -22,7 +22,7 @@ class Entries extends StatelessWidget {
       {required Job job, required Database database}) async {
     JobUpdateArgument jobUpdateArgument =
         JobUpdateArgument(database: database, job: job);
-    await Navigator.of(context)
+    await context.read<NavigatorState>()
         .pushNamed(Entries.route, arguments: jobUpdateArgument);
   }
 

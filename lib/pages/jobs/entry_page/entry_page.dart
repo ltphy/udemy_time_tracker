@@ -40,7 +40,7 @@ class EntryPage extends StatelessWidget {
   }) async {
     EntryArgument entryArguments =
         EntryArgument(database: database, entry: entry, job: job);
-    await Navigator.of(context)
+    await context.read<NavigatorState>()
         .pushNamed(EntryPage.route(entry?.id ?? ''), arguments: entryArguments);
   }
 
